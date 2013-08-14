@@ -1,0 +1,88 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix="c" %>
+<%@page import="java.util.*" %>
+<%
+	Map<String, String> langMap = (Map<String, String>)session.getAttribute("langMap"); 
+
+	String welcome = "";
+	String pleaselogin = "";
+	String username = "";
+	String password = "";
+	String signin = "";
+	String notamember = "";
+	String signup = "";
+	
+	if(langMap==null) {
+		welcome = "Welcome to JavaTunes! <br>Your online music store.";
+		pleaselogin = "Please Login";
+		username = "Username";
+		password = "Password";
+		signin = "Sign In";
+		notamember = "Not a Member?";
+		signup = "Sign Up";
+	} else {
+		welcome = langMap.get("login.welcome");
+		pleaselogin = langMap.get("login.pleaselogin");
+		username = langMap.get("login.username");
+		password = langMap.get("login.password");
+		signin = langMap.get("login.signin");
+		notamember = langMap.get("login.notamember");
+		signup = langMap.get("login.signup");
+	}
+%>
+
+<form:form modelAttribute="login" action="${pageContext.request.contextPath}/login.do">
+  <table width='600'>
+  
+  <tbody>
+    <tr>
+      <td width='70'><img src='images/guitar.gif' width='64' height='62' border='0'/></td>
+      <td align='right' width='514'><b><font size='+2'><%=welcome%></font></b></td>
+    </tr>
+    
+    <tr>
+      <td rowspan='3' width='70'><img src='images/piano.gif' width='63' height='53' border='0'/></td>
+      <td align='right' valign='top' width='514'><b><font size='+1'><i><font color='#0000cc'><%=pleaselogin%></font></i></font></b></td>
+    </tr>
+    
+    <tr>
+      <td align='right' valign='bottom' width='514'><font color='#0000cc'><b><%=username%></b></font>
+	  <form:input size='20' path='username'/><br/>
+    </tr>
+    
+    <tr>
+      <td align='right' valign='bottom' width='514'><font color='#0000cc'><b><%=password%></b></font>
+		  <form:input size='20' type='password' path='password'/><br/>
+	      <input type='submit' name='Submit' value='<%=signin%>'/>
+      </td>
+    </tr>
+    
+    <%
+    String message = "";
+	if (request.getParameter("msg") != null) {
+		if(request.getParameter("msg").toString().equals("needLogin")) {
+			message = langMap.get("login.timeout");
+	%>
+		 <tr>
+	    	<td align="right" colspan="2"><strong><font color='red'><%=message%></font></strong></td>
+	    </tr>
+	<%
+		}
+	}
+	%>
+    
+    
+    <%if(request.getAttribute("errorMessage")!=null) {
+    	message = (String)request.getAttribute("errorMessage");
+    %>
+	    <tr>
+	    	<td align="right" colspan="2"><font color='red'><%=message%></font></td>
+	    </tr>
+	<%}%>
+    <tr>
+    	<td align="center" colspan="2"><%=notamember%> <a href="register.do"><%=signup%></a></td>
+    </tr>
+    
+  </tbody>
+  </table>
+</form:form>

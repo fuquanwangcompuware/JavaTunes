@@ -1,0 +1,18 @@
+<%@ page import="com.javatunes.bean.User" %>
+<%@page import="java.util.*" %>
+<%
+	Map<String, String> langMap = (Map<String, String>)session.getAttribute("langMap"); 
+%>
+  
+  <table width='700'>
+  <tbody>
+    <tr>
+      <td width='80'><img src='images/guitar.gif' width='64' height='62' border='0'/></td>
+      <td align='right'><b><font size='+2'><%=langMap.get("header.hello")%> <i><strong><%=session.getAttribute("user").toString()%>!<br></strong></i> <%=langMap.get("login.welcome")%></font></b></td>
+    </tr>
+    <tr>
+      <td rowspan='2' width='80'><img src='images/piano.gif' width='63' height='53' border='0'/></td>
+      <td align='right' valign='top'><b><font size='+1'><i><font color='#0000cc'><%=langMap.get("header.largest")%></font></i></font></b></td>
+    </tr>
+  </tbody>
+  </table>

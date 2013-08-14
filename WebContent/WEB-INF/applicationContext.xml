@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<context:annotation-config/>
+	
+	<tx:annotation-driven transaction-manager="trsanctionManager"/>
+
+	<bean id="javatunesDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
+		<property name="url" value="jdbc:derby://localhost:1527/JavaTunesDB" />
+		<property name="username" value="guest" />
+		<property name="password" value="password" />
+	</bean>
+
+	<bean id="vendorAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="databasePlatform" value="org.hibernate.dialect.DerbyDialect" />
+		<property name="showSql" value="true" />
+		<property name="generateDdl" value="false" />
+	</bean>
+
+	<bean id="javatunesEmf"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="javatunesDataSource" />
+		<property name="persistenceUnitName" value="javatunes" />
+		<property name="jpaVendorAdapter" ref="vendorAdapter" />
+	</bean>
+	
+	<bean id="trsanctionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="dataSource" ref="javatunesDataSource"/>
+	</bean>
+	
+	<bean id="jpaItemDAO" class="com.javatunes.catalog.persist.JpaItemDAO">
+	</bean>
+	 
+	
+	<bean id="jpaUserDAO" class="com.javatunes.catalog.persist.JpaUserDAO">
+	</bean>
+	
+	<bean id="jpaCartDAO" class="com.javatunes.catalog.persist.JpaCartDAO">
+	</bean>
+
+	<bean id="javaTunesCatalog" class="com.javatunes.bean.JavaTunesCatalog">
+		<constructor-arg ref="jpaItemDAO" />
+		<property name="maxSearchResults">
+			<value>10</value>
+		</property>
+	</bean>
+	
+	<bean id="javaTunesUser" class="com.javatunes.bean.JavaTunesUser">
+		<constructor-arg ref="jpaUserDAO" />
+	</bean>
+	
+	<bean id="javaTunesCart" class="com.javatunes.bean.JavaTunesCart">
+		<constructor-arg ref="jpaCartDAO" />
+	</bean>
+	
+	<bean id="lang" class="com.javatunes.bean.Lang">
+	</bean>
+	
+</beans>
